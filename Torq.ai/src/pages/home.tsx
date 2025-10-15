@@ -1,8 +1,9 @@
 
-const Home = async() => {
+const Home = () => {
 
   return (
-    <div className="text-red-400">Home
+    <div className="text-red-400">
+      Home
     </div>
   )
 }

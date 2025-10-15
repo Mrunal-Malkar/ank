@@ -1,7 +1,13 @@
+import { div } from "motion/react-client"
 
 const Live = () => {
   return (
-  <h1>sad</h1>
+    <div className="h-[90dvh] w-screen flex">
+      <div className="w-min">
+        
+      </div>
+      <div className="w-max"></div>
+    </div>
   )
 }
 
