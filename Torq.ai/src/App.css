@@ -40,14 +40,43 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --animate-orbit: orbit calc(var(--duration)*1s) linear infinite;
-  @keyframes orbit {
-  0% {
-    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+  @keyframes orbit { 
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
     }
   100% {
     transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
-    }
   }
+  }
+  @keyframes orbPulse {
+          0% { transform: scale(0.85) rotate(0deg); filter: hue-rotate(0deg); }
+          25% { transform: scale(1.1) rotate(90deg); filter: hue-rotate(60deg); }
+          50% { transform: scale(0.9) rotate(180deg); filter: hue-rotate(120deg); }
+          75% { transform: scale(1.15) rotate(270deg); filter: hue-rotate(240deg); }
+          100% { transform: scale(0.85) rotate(360deg); filter: hue-rotate(360deg); }
+        }
+
+        @keyframes scale{
+          0%{transform:scale(0.85)}
+          25%{transform:scale(1.1)}
+          50%{transform:scale(0.9)}
+          75%{transform:scale(1.15)}
+          100%{transform:scale(0.85)}
+        }
+
+        @keyframes corePulse {
+          0%, 100% { transform: scale(0.95); opacity: 0.95; }
+          50% { transform: scale(1.05); opacity: 1; }
+        }
+        
+        @keyframes spin-slow {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        } 
+        --animate-orbitNormal:orbPulse 8s ease-in-out infinite;
+        --animate-scaleNormal:scale 8s ease-in-out infinite;
+        --animate-orbitCursor:orbPulse 12s ease-in-out infinite;
+        --animate-orbitActive:orbPulse 6s ease-in-out infinite;
 }
 
 :root {
