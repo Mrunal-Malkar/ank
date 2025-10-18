@@ -1,8 +1,14 @@
 import { useState } from "react";
 
-export default function DropdownHelperRadio() {
+interface propsInterface {
+  onChange?: (val: string) => void;
+}
+
+export default function DropdownHelperRadio({
+  onChange
+}: propsInterface) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState<string>(localStorage.getItem("profession")??"Student");
 
   return (
     <div className="relative inline-block text-left">
@@ -11,10 +17,10 @@ export default function DropdownHelperRadio() {
         id="dropdownHelperRadioButton"
         onClick={() => setOpen(!open)}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
-                   font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center 
+        font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center 
                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
-      >
+        >
         {selected || "Dropdown radio"}
         <svg
           className="w-2.5 h-2.5 ms-2.5"
@@ -36,32 +42,26 @@ export default function DropdownHelperRadio() {
       {/* Dropdown menu */}
       {open && (
         <div
-          id="dropdownHelperRadio"
-          className="absolute z-10 h-96 overflow-auto bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-60 
-                     dark:bg-gray-700 dark:divide-gray-600 mt-2"
+        id="dropdownHelperRadio"
+        className="absolute z-10 h-96 overflow-auto bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-60 
+        dark:bg-gray-700 dark:divide-gray-600 mt-2"
         >
           <ul
             className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownHelperRadioButton"
-          >
+            >
             {[
-                { id: 3, label: "Just a curious learner" },
+              { id: 3, label: "Just a curious learner" },
               { id: 4, label: "Teacher" },
               { id: 5, label: "Student" },
               { id: 6, label: "Scientist" },
-              { id: 6, label: "Shopkeeper" },
-              { id: 6, label: "Engineer" },
-              { id: 6, label: "Doctor" },
-              { id: 6, label: "Lawyer" },
+              { id: 7, label: "Shopkeeper" },
+              { id: 8, label: "Engineer" },
+              { id: 9, label: "Doctor" },
+              { id: 10, label: "Lawyer" },
             ].map((option) => (
               <li key={option.id}>
-                <div
-                  className="flex p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-                  onClick={() => {
-                    setSelected(option.label);
-                    setOpen(false);
-                  }}
-                >
+                <div className="flex p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
                   <div className="flex items-center h-5">
                     <input
                       id={`helper-radio-${option.id}`}
@@ -69,7 +69,12 @@ export default function DropdownHelperRadio() {
                       type="radio"
                       value={option.label}
                       checked={selected === option.label}
-                      onChange={() => setSelected(option.label)}
+                      onChange={() => {
+                        console.log(selected,option.label)
+                        setSelected(option.label);
+                        onChange?.(option.label);
+                        setOpen(false);
+                      }}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 
                                  focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 
                                  dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"

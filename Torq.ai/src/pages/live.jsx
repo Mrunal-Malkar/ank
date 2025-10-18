@@ -1,13 +1,18 @@
 import CircularOrbit from "@/components/circularOrbit";
 import NeonOrb from "@/components/torqCircle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Settings } from "lucide-react";
 import DropdownHelperRadio from "../components/dropdownRadio";
 import RadioGroup from "../components/radioGroup";
-import { StatefulButton } from "../components/statefullButton";
+import { StatefulButton } from "../components/statefulButton";
+import {returnPrompt} from "../lib/askingLlm"
 
 const Live = () => {
   const [active, setActive] = useState(false);
+  const [language, setLanguage] = useState();
+  const [age, setAge] = useState();
+  const [firstName, setFirstName] = useState();
+  const [profession, setProfession] = useState();
   const [userQuestion, setUserQuestion] = useState(null);
   const [heardHotword, setHeardHotword] = useState(false);
   const [speaking, setSpeaking] = useState(false);
@@ -24,6 +29,27 @@ const Live = () => {
     "hi talk",
     "hey talk",
   ];
+
+  function speakFunc(text, voiceIndex = 0, pitch = 1, rate = 1) {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+
+      if (voices.length > voiceIndex) {
+        utterance.voice = voices[voiceIndex];
+      }
+      utterance.pitch = pitch;
+      utterance.rate = rate;
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn("Speech Synthesis API not supported.");
+    }
+  }
+
+  async function askAi() {
+    // const question=
+  }
 
   function Listen() {
     if (
@@ -73,10 +99,44 @@ const Live = () => {
     // recognitionRef.current = recognition;
   }
 
-  async function askAi() {}
+  useEffect(() => {
+    const age = localStorage.getItem("age");
+    const firstName = localStorage.getItem("name");
+    const profession = localStorage.getItem("profession");
+    const language = localStorage.getItem("language");
 
+    setLanguage(language);
+    setFirstName(firstName);
+    setAge(age);
+    setProfession(profession);
+  }, []);
+
+  useEffect(() => {
+    if (userQuestion) {
+      askAi();
+    }
+  }, [userQuestion]);
+
+  async function askAi() {
+    if (!userQuestion) return;
+    const details = {
+      name: firstName,
+      age: age,
+      profession: profession,
+      language_Preferance: language,
+    };
+    const res = await fetch("localhost:3000/res", {
+      method: "POST",
+      data: { prompt: returnPrompt(details, userQuestion) },
+    });
+    if(res){
+      speakFunc(res,1,1,1.2);
+    }
+  };
+
+  askAi();
   return (
-    <div className="h-[100dvh] w-screen bg-green-200 flex justify-between">
+    <div className="h-[100dvh] w-screen flex justify-between">
       <div className="w-[15%] bg-yellow-300 h-full"></div>
       <div className="w-[60%] h-full flex flex-col bg-black justify-center items-center">
         <NeonOrb active={active} />
@@ -108,7 +168,8 @@ const Live = () => {
               </h3>
               <input
                 type="text"
-                placeholder="enter your first name"
+                placeholder={localStorage.getItem("name") ?? "Unknown"}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full text-sm p-2 rounded-xl border-t-2 border-r-2 border-gray-500 text-gray-400 outline-none focus:border-blue-600 hover:border-blue-600"
               />
             </div>
@@ -117,7 +178,11 @@ const Live = () => {
               <h3 className="font-semibold text-lg text-neutral-400">
                 Who are you?
               </h3>
-              <DropdownHelperRadio />
+              <DropdownHelperRadio
+                onChange={(val) => {
+                  setProfession(val);
+                }}
+              />
             </div>
             <div className="w-full flex flex-col">
               <h3 className="font-semibold text-lg text-neutral-400">
@@ -126,7 +191,7 @@ const Live = () => {
               <div className="flex justify-start gap-x-4">
                 <RadioGroup
                   values={["Hindi", "English"]}
-                  setDefault="English"
+                  setDefault={language}
                   onChange={(val) => {
                     setLanguage(val);
                   }}
@@ -140,16 +205,23 @@ const Live = () => {
               <div className="flex justify-start gap-x-4">
                 <RadioGroup
                   values={["Teen", "Young", "Old"]}
-                  setDefault="Young"
+                  setDefault={age}
                   onChange={(val) => {
-                    setLanguage(val);
+                    setAge(val);
                   }}
                 />
               </div>
             </div>
             <div className="flex flex-col justify-start gap-y-1 items-start">
-              <StatefulButton />
-              <h3 className="text-sm text-gray-400">don't forget to save changes, when done!</h3>
+              <StatefulButton
+                age={age}
+                profession={profession}
+                firstName={firstName}
+                language={language}
+              />
+              <h3 className="text-sm text-gray-400">
+                don't forget to save changes, when done!
+              </h3>
             </div>
           </div>
         </div>
