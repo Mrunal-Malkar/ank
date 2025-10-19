@@ -1,6 +1,6 @@
 import CircularOrbit from "@/components/circularOrbit";
 import NeonOrb from "@/components/torqCircle";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Settings } from "lucide-react";
 import DropdownHelperRadio from "../components/dropdownRadio";
 import RadioGroup from "../components/radioGroup";
@@ -14,9 +14,10 @@ const Live = () => {
   const [firstName, setFirstName] = useState();
   const [profession, setProfession] = useState();
   const [userQuestion, setUserQuestion] = useState(null);
-  const [heardHotword, setHeardHotword] = useState(false);
+  // const [heardHotword, setHeardHotword] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [listening, setListening] = useState(false);
+  const heardHotword=useRef(false);
 
   const hotWords = [
     "hey torq",
@@ -47,10 +48,6 @@ const Live = () => {
     }
   }
 
-  async function askAi() {
-    // const question=
-  }
-
   function Listen() {
     if (
       !("speechRecognition" in window || "webkitSpeechRecognition" in window)
@@ -74,12 +71,15 @@ const Live = () => {
         .trim()
         .toLowerCase();
       console.log("Heard:", transcript);
-      if (!heardHotword) {
+      console.log("heard hot word is:",heardHotword.current)
+      if (!heardHotword.current) {
         for (let n = 0; n < hotWords.length + 1; n++) {
-          if (heardHotword) return;
+          if (heardHotword.current) return;
           if (transcript == hotWords[n]) {
             console.log("🔥 Hotword detected!", transcript);
-            setHeardHotword(true);
+            // setHeardHotword(true);
+            heardHotword.current=true;
+            speakFunc("Hello, how can i help you?",1,1,1.2)
             break;
           }
         }
@@ -92,11 +92,12 @@ const Live = () => {
     recognition.onerror = (e) => console.warn("Speech error:", e);
 
     recognition.onend = () => {
-      if (!heardHotword) console.log("Recognition ended. Restarting...");
+     console.log("Recognition ended. Restarting...");
+      heardHotword.current=false;
       recognition.start(); // restart loop
     };
 
-    // recognitionRef.current = recognition;
+    recognitionRef.current = recognition;
   }
 
   useEffect(() => {
@@ -125,16 +126,20 @@ const Live = () => {
       profession: profession,
       language_Preferance: language,
     };
-    const res = await fetch("localhost:3000/res", {
+    const res = await fetch("http://localhost:3000/res", {
       method: "POST",
-      data: { prompt: returnPrompt(details, userQuestion) },
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify( { prompt: returnPrompt(details, userQuestion) }),
     });
     if(res){
-      speakFunc(res,1,1,1.2);
+      const response=await res.json();
+      console.log(response)
+      speakFunc(response.data,1,1,1.2);
     }
   };
 
-  askAi();
   return (
     <div className="h-[100dvh] w-screen flex justify-between">
       <div className="w-[15%] bg-yellow-300 h-full"></div>
