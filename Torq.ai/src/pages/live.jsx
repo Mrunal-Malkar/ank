@@ -140,7 +140,8 @@ const Live = () => {
   }
 
   return (
-    <div className="h-[100dvh] 2xl:w-[90dvw] flex flex-col md:justify-end 2xl:justify-start items-center md:flex-row xl:justify-between">
+    <div className="h-[100dvh] flex flex-col md:flex-col">
+      <div className="h-[100dvh] 2xl:w-[90dvw] flex flex-col md:justify-end 2xl:justify-start items-center md:flex-row xl:justify-between">
       <HistoryPage className="2xl:w-[25%] 2xl:flex hidden" />
       <div className="w-full min-h-full md:w-[50%] md:h-full flex flex-col bg-black justify-center items-center">
         <NeonOrb heardHotword={heardHotword.current} />
@@ -151,7 +152,8 @@ const Live = () => {
           Ask
         </button>
       </div>
-      <div className="h-full w-[100dvw] bg-black md:w-[35%] 2xl:w-[25%] flex items-end md:p-0 p-4">
+      <HistoryPage className="w-[100dvw] md:hidden" />
+      <div className="h-[100dvh] w-[100dvw] bg-black md:w-[35%] 2xl:w-[25%] flex items-end md:p-0 p-4">
         <div className="h-[85dvh] 2xl:h-[85dvh]">
           <div className="flex flex-col gap-0.5">
             <div className="text-gray-300 flex items-center justify-start gap-x-0.">
@@ -230,7 +232,9 @@ const Live = () => {
           </div>
         </div>
       </div>
-     <HistoryPage className="w-[100dvw] md:hidden" />             
+
+      </div>
+     <HistoryPage className="w-[100dvw] hidden md:flex 2xl:hidden" />             
     </div>
   );
 };
