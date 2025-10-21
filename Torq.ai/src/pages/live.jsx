@@ -1,23 +1,22 @@
 import CircularOrbit from "@/components/circularOrbit";
-import NeonOrb from "@/components/torqCircle";
+import NeonOrb from "@/components/NeonOrb";
 import { useEffect, useRef, useState } from "react";
 import { Settings } from "lucide-react";
 import DropdownHelperRadio from "../components/dropdownRadio";
 import RadioGroup from "../components/radioGroup";
 import { StatefulButton } from "../components/statefulButton";
-import {returnPrompt} from "../lib/askingLlm"
+import HistoryPage from "../components/historyPage";
+import { returnPrompt } from "../lib/askingLlm";
 
 const Live = () => {
-  const [active, setActive] = useState(false);
   const [language, setLanguage] = useState();
   const [age, setAge] = useState();
   const [firstName, setFirstName] = useState();
   const [profession, setProfession] = useState();
   const [userQuestion, setUserQuestion] = useState(null);
-  // const [heardHotword, setHeardHotword] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [listening, setListening] = useState(false);
-  const heardHotword=useRef(false);
+  const heardHotword = useRef(false);
 
   const hotWords = [
     "hey torq",
@@ -71,15 +70,15 @@ const Live = () => {
         .trim()
         .toLowerCase();
       console.log("Heard:", transcript);
-      console.log("heard hot word is:",heardHotword.current)
+      console.log("heard hot word is:", heardHotword.current);
       if (!heardHotword.current) {
         for (let n = 0; n < hotWords.length + 1; n++) {
           if (heardHotword.current) return;
           if (transcript == hotWords[n]) {
             console.log("🔥 Hotword detected!", transcript);
             // setHeardHotword(true);
-            heardHotword.current=true;
-            speakFunc("Hello, how can i help you?",1,1,1.2)
+            heardHotword.current = true;
+            speakFunc("Hello, how can i help you?", 1, 1, 1.2);
             break;
           }
         }
@@ -89,11 +88,11 @@ const Live = () => {
       }
     };
 
-    recognition.onerror = (e) => console.warn("Speech error:", e);
+    recognition.onerror = (e) => console.log("speech recognition error:", e);
 
     recognition.onend = () => {
-     console.log("Recognition ended. Restarting...");
-      heardHotword.current=false;
+      console.log("Recognition ended. Restarting...");
+      heardHotword.current = false;
       recognition.start(); // restart loop
     };
 
@@ -128,36 +127,36 @@ const Live = () => {
     };
     const res = await fetch("http://localhost:3000/res", {
       method: "POST",
-      headers:{
-        "Content-Type":"application/json"
+      headers: {
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify( { prompt: returnPrompt(details, userQuestion) }),
+      body: JSON.stringify({ prompt: returnPrompt(details, userQuestion) }),
     });
-    if(res){
-      const response=await res.json();
-      console.log(response)
-      speakFunc(response.data,1,1,1.2);
+    if (res) {
+      const response = await res.json();
+      console.log(response);
+      speakFunc(response.data, 1, 1, 1.2);
     }
-  };
+  }
 
   return (
-    <div className="h-[100dvh] w-screen flex justify-between">
-      <div className="w-[15%] bg-yellow-300 h-full"></div>
-      <div className="w-[60%] h-full flex flex-col bg-black justify-center items-center">
-        <NeonOrb active={active} />
+    <div className="h-[100dvh] 2xl:w-[90dvw] flex flex-col md:justify-end 2xl:justify-start items-center md:flex-row xl:justify-between">
+      <HistoryPage className="2xl:w-[25%] 2xl:flex hidden" />
+      <div className="w-full min-h-full md:w-[50%] md:h-full flex flex-col bg-black justify-center items-center">
+        <NeonOrb heardHotword={heardHotword.current} />
         <button
-          className="font-semibold px-6 py-2 text-white/90 ms-12"
+          className="font-semibold px-6 py-2 text-white/90"
           onClick={Listen}
         >
           Ask
         </button>
       </div>
-      <div className="w-[25%] flex items-end">
-        <div className="h-[90dvh] bg-black w-full">
+      <div className="h-full w-[100dvw] bg-black md:w-[35%] 2xl:w-[25%] flex items-end md:p-0 p-4">
+        <div className="h-[85dvh] 2xl:h-[85dvh]">
           <div className="flex flex-col gap-0.5">
             <div className="text-gray-300 flex items-center justify-start gap-x-0.">
               <h1 className="text-xl font-bold">Torq Settings</h1>{" "}
-              <Settings className="size-10 self-center mt-2.5" />
+              <Settings className="size-10 self-center mt-2.5 hidden xl:block" />
             </div>
             <p className="text-lg font-semibold text-gray-400">
               Adjust the specifications according to you and don't forget to
@@ -231,6 +230,7 @@ const Live = () => {
           </div>
         </div>
       </div>
+     <HistoryPage className="w-[100dvw] md:hidden" />             
     </div>
   );
 };
