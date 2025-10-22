@@ -1,19 +1,15 @@
 import { AnimatedModal } from "./Modal";
 
-type QandAinterface = string[];
+type QandAinterface =[
+  {question:string,answer:string}
+]
 
-const HistoryPage = ({ className }: { className: string }) => {
-  const questions: QandAinterface = [];
-  const answers: QandAinterface = [];
+interface propInterface{
+  className:string,
+  qAnda:QandAinterface
+}
 
-  for (let i = 1; i < 8; i++) {
-    const question = localStorage.getItem(`question${i}`);
-    const answer = localStorage.getItem(`answer${i}`);
-    if (question && answer) {
-      questions.push(question);
-      answers.push(answer);
-    }
-  }
+const HistoryPage = ({ className,qAnda }:propInterface) => {
 
   return (
     <div
@@ -26,14 +22,15 @@ const HistoryPage = ({ className }: { className: string }) => {
           Chat-History
         </h1>
         <div className="w-full h-max flex flex-col items-start justify-start">
-          {questions.length>0?questions.map((question, index) => {
+          {qAnda.length>0?qAnda.map((array,index) => {
             return (
               <AnimatedModal
+              key={index}
                 title={
-                  question.slice(0, 30) + (question.length > 30 ? "..." : "")
+                  (array.question).slice(0, 30) + ((array.question).length > 30 ? "..." : "")
                 }
-                subHeading={question}
-                content={answers[index]}
+                subHeading={array.question}
+                content={array.answer}
               />
             );
           }):

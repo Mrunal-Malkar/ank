@@ -17,10 +17,12 @@ const Live = () => {
   const [speaking, setSpeaking] = useState(false);
   const [listening, setListening] = useState(false);
   const heardHotword = useRef(false);
+  const [qAnda,setQAndA]=useState([])
 
   const hotWords = [
     "hey torq",
     "torq",
+    "torque",
     "hello torq",
     "hi torq",
     "hey talk",
@@ -99,16 +101,27 @@ const Live = () => {
     recognitionRef.current = recognition;
   }
 
+  function setQuestionAndAnswers(){
+   const array=JSON.parse(localStorage.getItem("qAnda"))
+  if(!array){
+    const dummy={question:"ask question to get started",answer:"answers will be shown and stored safely over here!"};
+    setQAndA([dummy]);
+  }else if(array.length>0){
+    setQAndA(array);
+  }
+  }
+
   useEffect(() => {
     const age = localStorage.getItem("age");
     const firstName = localStorage.getItem("name");
     const profession = localStorage.getItem("profession");
     const language = localStorage.getItem("language");
-
+    
     setLanguage(language);
     setFirstName(firstName);
     setAge(age);
     setProfession(profession);
+    setQuestionAndAnswers();
   }, []);
 
   useEffect(() => {
@@ -136,13 +149,23 @@ const Live = () => {
       const response = await res.json();
       console.log(response);
       speakFunc(response.data, 1, 1, 1.2);
+      if(qAnda.length>=9){
+        const newArray=qAnda.slice(0,9);
+        const newQandA = [{ question: userQuestion, answer: response.data }, ...newArray];
+        setQAndA(newQandA);
+        localStorage.setItem("qAnda",JSON.stringify(newQandA));
+      }else{
+        setQAndA((prev)=>([{question:userQuestion,answer:response.data},...prev]));
+      localStorage.setItem("qAnda",JSON.stringify(qAnda));
+      }
     }
   }
 
   return (
     <div className="h-[100dvh] flex flex-col md:flex-col">
+      <div className="absolute top-1 right-1"><div className="rounded-2xl w-4 h-4 bg-gray-600 text-white flex justify-center items-center">i</div></div>
       <div className="h-[100dvh] 2xl:w-[90dvw] flex flex-col md:justify-end 2xl:justify-start items-center md:flex-row xl:justify-between">
-      <HistoryPage className="2xl:w-[25%] 2xl:flex hidden" />
+      <HistoryPage qAnda={qAnda} className="2xl:w-[25%] 2xl:flex hidden" />
       <div className="w-full min-h-full md:w-[50%] md:h-full flex flex-col bg-black justify-center items-center">
         <NeonOrb heardHotword={heardHotword.current} />
         <button
@@ -152,7 +175,7 @@ const Live = () => {
           Ask
         </button>
       </div>
-      <HistoryPage className="w-[100dvw] md:hidden" />
+      <HistoryPage qAnda={qAnda} className="w-[100dvw] md:hidden" />
       <div className="h-[100dvh] w-[100dvw] bg-black md:w-[35%] 2xl:w-[25%] flex items-end md:p-0 p-4">
         <div className="h-[85dvh] 2xl:h-[85dvh]">
           <div className="flex flex-col gap-0.5">
@@ -234,7 +257,7 @@ const Live = () => {
       </div>
 
       </div>
-     <HistoryPage className="w-[100dvw] hidden md:flex 2xl:hidden" />             
+     <HistoryPage qAnda={qAnda} className="w-[100dvw] hidden md:flex 2xl:hidden" />             
     </div>
   );
 };

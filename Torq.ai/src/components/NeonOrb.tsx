@@ -1,4 +1,3 @@
-import { applyPxDefaults } from "motion";
 
 export default function NeonOrb({ heardHotword }: { heardHotword: boolean }) {
   return (

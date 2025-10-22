@@ -5,13 +5,15 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Live from './pages/live.jsx';
 import Home from './pages/home.tsx';
+import About from './pages/about.tsx';
 
 const router=createBrowserRouter([
   {
     path:"/",element:<App/>,
     children:[
       {index:true,path:"/",element:<Home/>},
-      {path:"live",element:<Live/>}
+      {path:"live",element:<Live/>},
+      {path:"about",element:<About/>},
     ]
   }
 ])

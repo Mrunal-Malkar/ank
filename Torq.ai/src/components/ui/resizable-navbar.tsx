@@ -9,6 +9,7 @@ import {
 } from "motion/react";
 
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 interface NavbarProps {
@@ -115,7 +116,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
 
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
-
+const navigate=useNavigate();
   return (
     <motion.div
       onMouseLeave={() => setHovered(null)}
@@ -127,10 +128,9 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       {items.map((item, idx) => (
         <a
           onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          onClick={()=>onItemClick}
+          className="relative px-4 py-2 text-neutral-600 cursor-pointer dark:text-neutral-300"
           key={`link-${idx}`}
-          href={item.link}
         >
           {hovered === idx && (
             <motion.div
@@ -138,7 +138,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
               className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
             />
           )}
-          <span className="relative z-20">{item.name}</span>
+          <span onClick={()=>navigate(item.link)} className="relative z-20">{item.name}</span>
         </a>
       ))}
     </motion.div>
@@ -234,15 +234,17 @@ export const NavbarLogo = () => {
   return (
     <a
       href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+      className="relative z-20 mr-4 flex items-center justify-items-center space-x-1 px-2 py-1 text-sm font-normal rounded-2xl text-black"
     >
+      <div className="bg-white rounded-3xl">
       <img
-        src="https://assets.aceternity.com/logo-dark.png"
+        src="T.png"
         alt="logo"
         width={30}
         height={30}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      </div>
+      <span className="font-medium text-black dark:text-white">Torq</span>
     </a>
   );
 };
