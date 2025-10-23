@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 const corsOptions = {
-      origin: "http://localhost:5173", // Replace with your frontend origin
+      origin: "https://ank-eight.vercel.app/", // Replace with your frontend origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allow cookies to be sent with cross-origin requests
   allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
