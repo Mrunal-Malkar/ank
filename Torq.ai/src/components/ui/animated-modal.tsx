@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import React, {
   ReactNode,
@@ -27,6 +27,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useModal = () => {
   const context = useContext(ModalContext);
   if (!context) {
@@ -219,6 +220,7 @@ const CloseIcon = () => {
 
 // Hook to detect clicks outside of a component.
 // Add it in a separate file, I've added here for simplicity
+// eslint-disable-next-line react-refresh/only-export-components
 export const useOutsideClick = (
   ref: React.RefObject<HTMLDivElement>,
   callback: Function

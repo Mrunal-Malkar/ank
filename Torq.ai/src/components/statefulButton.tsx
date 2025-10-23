@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/stateful-button";
+import { Button } from "../components/ui/stateful-button";
 
 export function StatefulButton({ language, age, firstName, profession }:{language:string,age:string,firstName:string,profession:string}) {
   // dummy API call

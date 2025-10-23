@@ -1,7 +1,7 @@
-import { BackgroundBeamsWithCollisionLive } from "@/components/explodingBeams"
-import { GridBackground } from "@/components/gridBg"
-import { StickyScrollReveal } from "@/components/stickyScroll"
-import { ThreeDCard } from "@/components/ThreeD-card"
+import { BackgroundBeamsWithCollisionLive } from "../components/explodingBeams"
+import { GridBackground } from "../components/gridBg"
+import { StickyScrollReveal } from "../components/stickyScroll"
+import { ThreeDCard } from "../components/ThreeD-card"
 
 const Home = () => {
 

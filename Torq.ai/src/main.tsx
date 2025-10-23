@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-//@ts-expect-error:the following module has no declared type
 import Live from './pages/live.jsx';
 import Home from './pages/home.tsx';
 import About from './pages/about.tsx';

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 import { Button } from "./ui/moving-border";
 import { useNavigate } from "react-router-dom";
 export function GridBackground() {

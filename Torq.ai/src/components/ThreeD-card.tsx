@@ -1,4 +1,4 @@
-import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { CardBody, CardContainer, CardItem } from "../components/ui/3d-card";
 import { useNavigate } from "react-router-dom";
 
 const itemsArray = [
