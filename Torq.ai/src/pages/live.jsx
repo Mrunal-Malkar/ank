@@ -17,6 +17,7 @@ const Live = () => {
   const [speaking, setSpeaking] = useState(false);
   const [listening, setListening] = useState(false);
   const heardHotword = useRef(false);
+  const [startedListening,setStartedListening]=useState(false);
   const [qAnda,setQAndA]=useState([])
 
   const hotWords = [
@@ -50,12 +51,16 @@ const Live = () => {
   }
 
   function Listen() {
+    if(startedListening==true){
+      console.log("already listening");
+      return;}
     if (
       !("speechRecognition" in window || "webkitSpeechRecognition" in window)
     ) {
       console.error("This browser does not support speech recognition api");
       return;
     }
+    setStartedListening(true);
 
     const speechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -169,10 +174,16 @@ const Live = () => {
       <div className="w-full min-h-full md:w-[50%] md:h-full flex flex-col bg-black justify-center items-center">
         <NeonOrb heardHotword={heardHotword.current} />
         <button
-          className="font-semibold px-6 py-2 text-white/90"
-          onClick={Listen}
+          className={`font-semibold px-6 py-2 text-white/90 ${startedListening?"hidden":""}`}
+          onClick={()=>{Listen();}}
         >
           Ask
+        </button>
+        <button
+          className={`font-semibold px-6 py-2 bg-gray-700 text-white/40 ${startedListening?"":"hidden"}`}
+          onClick={()=>{window.location.reload();}}
+        >
+          reload
         </button>
       </div>
       <HistoryPage qAnda={qAnda} className="w-[100dvw] md:hidden" />
