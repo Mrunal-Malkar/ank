@@ -15,7 +15,7 @@ const About = () => {
         were glad to be part of it.
       </p>
       <h2 className="sm:text-2xl text-xl mt-1.5">How to use?</h2>
-      <p>Torq is ready to take down questions only when the color of the object below torq turns gray, if the object is invisible that means you haven't activated it. How to activate? just utter the words like "torq","hey torq","Hello torq","torq" once done, torq will respond you and you are good to go!!</p>
+      <p>Torq is ready to take down questions only when the color of the object below torq turns invisible, if the object is visible that means you haven't activated it. How to activate? just utter the words like "torq","hey torq","Hello torq","torq" once done, torq will respond you and you are good to go!!</p>
       <h1 className="sm:text-2xl text-xl mt-1.5">Our Team</h1>
       <div className="flex justify-center w-full">
         <AnimatedTooltipPreview />
