@@ -1,5 +1,5 @@
-import { Perplexity } from "@perplexity-ai/perplexity_ai/client.js";
-import express, { response } from "express";
+import { Perplexity } from "@perplexity-ai/perplexity_ai";
+import express from "express";
 import {config as configDotenv } from "dotenv";
 import cors from "cors";
 
@@ -14,7 +14,7 @@ const corsOptions = {
   allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
