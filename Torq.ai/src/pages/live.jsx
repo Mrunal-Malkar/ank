@@ -143,7 +143,7 @@ const Live = () => {
       profession: profession,
       language_Preferance: language,
     };
-    const res = await fetch("https://ankai.netlify.app/res", {
+    const res = await fetch("https://ank-irtl.onrender.com/res", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
